@@ -3,9 +3,11 @@ const port = 3000;
 
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 
 app.set("view engine", "ejs");
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({extended: true}));
 
 const recipes = [
     {
@@ -31,6 +33,16 @@ app.get("/", (req, res) => {
 
 app.get("/recipes", (req,res) => {
     res.render("recipes", {recipes});
+})
+
+app.post("/recipes", (req, res) => {
+    console.log(req.body);
+    recipes.push(req.body);
+    res.redirect("/recipes");
+})
+
+app.get("/recipes/new", (req, res) => {
+    res.render("recipes_new");
 })
 
 app.listen(port, hostname, () => {
