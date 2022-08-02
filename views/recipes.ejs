@@ -1,0 +1,13 @@
+<%- include("partials/header") %>
+        <h1 class="page-title">Recipes Page</h1>
+    
+        <div class="container">
+        <% recipes.forEach((recipe) => { %>
+            <div class="card">
+                <img class="card-img" src="<%= recipe.image %>" alt="Picture of the food">
+                <h3 class="card-title"><%= recipe.title %></h3>
+                <p class="card-description"><%= recipe.description %></p>
+            </div>
+            <% }) %>
+        </div>
+<%- include("partials/footer") %>
