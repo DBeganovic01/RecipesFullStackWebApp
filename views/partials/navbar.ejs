@@ -13,7 +13,7 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Meal
+                        Browse Meals
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">All</a></li>
@@ -22,9 +22,19 @@
                         <li><a class="dropdown-item" href="#">Dinner</a></li>
                         <li><a class="dropdown-item" href="#">Dessert</a></li>
                         <li><a class="dropdown-item" href="#">Snack</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Show only recipes for which I have ingredients for in my pantry</label>
+                        </div>
+                          
+                        <!-- <li><a class="dropdown-item" href="#">Pantry Ingredients only</a></li> -->
                     </ul>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Add Recipe</a>
+                        <a class="nav-link" href="/recipes/new">Add Recipe</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pantry">Pantry</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Login</a>

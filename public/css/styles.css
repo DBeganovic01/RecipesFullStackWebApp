@@ -30,7 +30,7 @@ body {
     border-radius: 1rem 1rem 0 0;
 }
 
-.card-title {
+.card-recipeName {
     text-align: center;
     margin: 0.5rem;
     font-family: sans-serif;

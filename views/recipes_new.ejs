@@ -1,5 +1,5 @@
 <%- include("partials/header") %>
-    <h1>Add New Recipe</h1>
+    <!-- <h1>Add New Recipe</h1>
     <form action="/recipes" method="POST">
         <label for="title">Title</label>
         <input type="text" name="title" autofocus>
@@ -8,6 +8,22 @@
         <label for="image">Image Link</label>
         <input type="text" name="image">
         <button type="submit">Submit</button>
-    </form>
-
+    </form> -->
+    <div class="container">
+        <form action="/recipes" method="POST">
+            <div class="mb-3">
+                <label for="recipeName" class="form-label">Recipe Name</label>
+                <input type="text" class="form-control" name="recipeName" placeholder="Name of your recipe" autofocus>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <input type="text" class="form-control" name="description" placeholder="Add a short description for your recipe">
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Link to Image</label>
+                <input type="text" class="form-control" name="image" placeholder="Add a link to an image of your recipe">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
 <%- include("partials/footer") %>
