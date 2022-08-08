@@ -4,6 +4,9 @@ const port = 3000;
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const config = require('./config');
+
+console.log(config.db.username);
 
 app.set("view engine", "ejs");
 app.use(express.static('public'));
