@@ -5,43 +5,67 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const config = require('./config');
+const Recipe = require('./models/recipe');
 
-console.log(config.db.username);
+const mongoose = require('mongoose');
+mongoose.connect(config.db.connection);
 
 app.set("view engine", "ejs");
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 
-const recipes = [
-    {
-        recipeName: "Baked Potato",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        image: "https://www.simplyrecipes.com/thmb/GZwoVSMKQ2tiBKner6bDmCXJPi0=/1600x1067/filters:fill(auto,1)/Twice-Baked-Potatoes-LEAD-1v2-f7918849ddd245c5aecf0ec58fb2b47e.jpg"
-    },
-    {
-        recipeName: "Crepes",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        image: "https://handletheheat.com/wp-content/uploads/2014/02/How-to-Make-Crepes-SQUARE.jpg"
-    },
-    {
-        recipeName: "Baked Salmon",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        image: "https://www.acouplecooks.com/wp-content/uploads/2020/01/Broiled-Salmon-006-368x368.jpg"
-    }
-]
+// const recipes = [
+//     {
+//         recipeName: "Baked Potato",
+//         description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+//         image: "https://www.simplyrecipes.com/thmb/GZwoVSMKQ2tiBKner6bDmCXJPi0=/1600x1067/filters:fill(auto,1)/Twice-Baked-Potatoes-LEAD-1v2-f7918849ddd245c5aecf0ec58fb2b47e.jpg"
+//     },
+//     {
+//         recipeName: "Crepes",
+//         description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+//         image: "https://handletheheat.com/wp-content/uploads/2014/02/How-to-Make-Crepes-SQUARE.jpg"
+//     },
+//     {
+//         recipeName: "Baked Salmon",
+//         description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+//         image: "https://www.acouplecooks.com/wp-content/uploads/2020/01/Broiled-Salmon-006-368x368.jpg"
+//     }
+// ]
 
 app.get("/", (req, res) => {
     res.render("landing");
 })
 
 app.get("/recipes", (req,res) => {
-    res.render("recipes", {recipes});
-})
+    Recipe.find()
+    .exec()
+    .then((foundRecipes) => {
+        res.render("recipes", {recipes: foundRecipes});
+    })
+    .catch((err) => {
+        console.log(err);
+        res.redirect("/recipes");
+    })
+});
 
 app.post("/recipes", (req, res) => {
     console.log(req.body);
-    recipes.push(req.body);
-    res.redirect("/recipes");
+    const newRecipe = {
+        recipeName: req.body.recipeName,
+        description: req.body.description,
+        image: req.body.image,
+        ingredients: req.body.ingredients,
+        instructions: req.body.instructions
+    }
+    Recipe.create(newRecipe)
+    .then((recipe) => {
+        console.log(recipe);
+        res.redirect("/recipes");
+    })
+    .catch((err) => {
+        console.log(err);
+        res.redirect("/recipes");
+    });
 })
 
 app.get("/recipes/new", (req, res) => {
