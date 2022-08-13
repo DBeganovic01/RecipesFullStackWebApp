@@ -26,3 +26,8 @@ body {
     font-family: sans-serif;
     line-height: 1.4rem;
 }
+
+/* show_recipes */
+.show_image-container img {
+    width: 80%;
+}

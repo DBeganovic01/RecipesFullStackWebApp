@@ -74,7 +74,14 @@ app.get("/recipes/new", (req, res) => {
 })
 
 app.get("/recipes/:id", (req, res) => {
-    res.send("Show page for recipe with ID of: " + req.params.id);
+    Recipe.findById(req.params.id)
+    .exec()
+    .then((recipe) => {
+        res.render("recipes_show", {recipe});
+    })
+    .catch((err) => {
+        res.send(err);
+    })
 })
 
 app.get("/pantry", (req,res) => {
