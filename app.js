@@ -44,13 +44,14 @@ app.get("/recipes", (req,res) => {
     })
     .catch((err) => {
         console.log(err);
-        res.redirect("/recipes");
+        res.send(err);
     })
 });
 
 app.post("/recipes", (req, res) => {
     console.log(req.body);
     const newRecipe = {
+        mealType: req.body.mealType,
         recipeName: req.body.recipeName,
         description: req.body.description,
         image: req.body.image,
@@ -70,6 +71,10 @@ app.post("/recipes", (req, res) => {
 
 app.get("/recipes/new", (req, res) => {
     res.render("recipes_new");
+})
+
+app.get("/recipes/:id", (req, res) => {
+    res.send("Show page for recipe with ID of: " + req.params.id);
 })
 
 app.get("/pantry", (req,res) => {
