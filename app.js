@@ -6,6 +6,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const config = require('./config');
 const Recipe = require('./models/recipe');
+const Comment = require('./models/comment');
 
 const mongoose = require('mongoose');
 mongoose.connect(config.db.connection);
@@ -83,6 +84,29 @@ app.get("/recipes/:id", (req, res) => {
         res.send(err);
     })
 })
+
+// New Comment - Show Form
+app.get("/recipes/:id/comments/new", (req, res) => {
+    res.render("comments_new", {recipeId: req.params.id})
+})
+
+// Create Comment - Actually Update the DB
+app.post("/recipes/:id/comments", (req, res) => {
+    Comment.create({
+        user: req.body.user,
+        text: req.body.text,
+        recipeId: req.body.recipeId
+    })
+    .then((newComment) => {
+        console.log(newComment);
+        res.redirect(`/recipes/${req.body.recipeId}`);
+    })
+    .catch((err) => {
+        console.log(err);
+        res.redirect(`/recipes/${req.body.recipeId}`);
+    })
+})
+
 
 app.get("/pantry", (req,res) => {
     res.render("pantry");
