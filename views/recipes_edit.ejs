@@ -1,7 +1,7 @@
 <%- include("partials/header") %>
     <div class="container">
-        <h1>Add New Recipe</h1>
-        <form action="/recipes" method="POST">
+        <h1>Edit Recipe</h1>
+        <form action="/recipes/<%= recipe._id %>?_method=PUT" method="POST">
             <div class="mb-3">
                 <label for="mealType" class="form-label">Meal Type</label>
                 <select class="form-control" id="mealType" name="mealType" autofocus>

@@ -68,4 +68,24 @@ router.get("/:id/edit", (req, res) => {
     })
 })
 
+router.put("/:id/", (req, res) => {
+    const recipe = {
+        mealType: req.body.mealType,
+        recipeName: req.body.recipeName,
+        description: req.body.description,
+        image: req.body.image,
+        ingredients: req.body.ingredients,
+        instructions: req.body.instructions
+    }
+    Recipe.findByIdAndUpdate(req.params.id, recipe, {new: true})
+    .exec()
+    .then((updatedRecipe) => {
+        console.log(updatedRecipe)
+        res.redirect(`/recipes/${req.params.id}`)
+    })
+    .catch((err) => {
+        res.send("Error: ", err);
+    })
+})
+
 module.exports = router;
