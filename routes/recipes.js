@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Recipe = require('../models/recipe');
+const Comment = require('../models/comment');
 
 router.get("/", (req,res) => {
     Recipe.find()
@@ -43,7 +44,14 @@ router.get("/:id", (req, res) => {
     Recipe.findById(req.params.id)
     .exec()
     .then((recipe) => {
-        res.render("recipes_show", {recipe});
+        // res.render("recipes_show", {recipe});
+        Comment.find({recipeId: req.params.id}, (err, comments) => {
+            if (err) {
+                res.send(err);
+            } else {
+                res.render("recipes_show", {recipe, comments})
+            }
+        })
     })
     .catch((err) => {
         res.send(err);
