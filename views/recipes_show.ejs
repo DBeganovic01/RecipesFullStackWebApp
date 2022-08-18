@@ -24,6 +24,16 @@
                         </tr>
                     </tbody>
                 </table>
+                <a href="/recipes/<%= recipe._id %>/edit">
+                    <button class="btn btn-outline-info btn-lg btn-block mb-2">
+                        Edit
+                    </button>
+                </a>
+                <form action="/recipes/<%= recipe._id %>?_method=DELETE" method="POST">
+                    <button type="submit" class="btn btn-outline-danger btn-lg btn-block">
+                        Delete
+                    </button>
+                </form>
             </div>
         </div>
         <div class="row show_comment-header mt-3">

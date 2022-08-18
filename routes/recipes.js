@@ -3,6 +3,7 @@ const router = express.Router();
 const Recipe = require('../models/recipe');
 const Comment = require('../models/comment');
 
+// Index
 router.get("/", (req,res) => {
     Recipe.find()
     .exec()
@@ -15,6 +16,7 @@ router.get("/", (req,res) => {
     })
 });
 
+// Create
 router.post("/", (req, res) => {
     console.log(req.body);
     const newRecipe = {
@@ -28,18 +30,20 @@ router.post("/", (req, res) => {
     Recipe.create(newRecipe)
     .then((recipe) => {
         console.log(recipe);
-        res.redirect("/recipes");
+        res.redirect("/recipes/" + recipe._id);
     })
     .catch((err) => {
         console.log(err);
-        res.redirect("/recipes");
+        res.redirect("/recipes/" + recipe._id);
     });
 })
 
+// New
 router.get("/new", (req, res) => {
     res.render("recipes_new");
 })
 
+// Show
 router.get("/:id", (req, res) => {
     Recipe.findById(req.params.id)
     .exec()
@@ -58,6 +62,7 @@ router.get("/:id", (req, res) => {
     })
 })
 
+// Edit
 router.get("/:id/edit", (req, res) => {
     // Get the recipe from the DB
     Recipe.findById(req.params.id)
@@ -68,6 +73,7 @@ router.get("/:id/edit", (req, res) => {
     })
 })
 
+// Update
 router.put("/:id/", (req, res) => {
     const recipe = {
         mealType: req.body.mealType,
@@ -85,6 +91,19 @@ router.put("/:id/", (req, res) => {
     })
     .catch((err) => {
         res.send("Error: ", err);
+    })
+})
+
+// Delete
+router.delete("/:id", (req, res) => {
+    Recipe.findByIdAndDelete(req.params.id)
+    .exec()
+    .then((deletedRecipe) => {
+        console.log("Deleted: ", deletedRecipe);
+        res.redirect("/recipes");
+    })
+    .catch((err) => {
+        res.send("Error deleting: ", err);
     })
 })
 
