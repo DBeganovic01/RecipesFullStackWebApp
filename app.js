@@ -7,6 +7,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
+const morgan = require('morgan');
 
 // Config Imports
 const config = require('./config');
@@ -28,6 +29,7 @@ app.set("view engine", "ejs");
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
+app.use(morgan('tiny'));
 
 app.get("/pantry", (req,res) => {
     res.render("pantry");
