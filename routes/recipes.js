@@ -58,4 +58,14 @@ router.get("/:id", (req, res) => {
     })
 })
 
+router.get("/:id/edit", (req, res) => {
+    // Get the recipe from the DB
+    Recipe.findById(req.params.id)
+    .exec()
+    .then((recipe) => {
+        // Render the edit form, passing in the recipe
+        res.render("recipes_edit", {recipe})
+    })
+})
+
 module.exports = router;

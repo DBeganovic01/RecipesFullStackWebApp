@@ -1,0 +1,39 @@
+<%- include("partials/header") %>
+    <div class="container">
+        <h1>Add New Recipe</h1>
+        <form action="/recipes" method="POST">
+            <div class="mb-3">
+                <label for="mealType" class="form-label">Meal Type</label>
+                <select class="form-control" id="mealType" name="mealType" autofocus>
+                    <option disabled>Choose the meal type</option>
+                    <option <%= recipe.mealType === 'Breakfast' ? 'selected' : '' %>>Breakfast</option>
+                    <option <%= recipe.mealType === 'Lunch' ? 'selected' : '' %>>Lunch</option>
+                    <option <%= recipe.mealType === 'Dinner' ? 'selected' : '' %>>Dinner</option>
+                    <option <%= recipe.mealType === 'Dessert' ? 'selected' : '' %>>Dessert</option>
+                    <option <%= recipe.mealType === 'Snack' ? 'selected' : '' %>>Snack</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="recipeName" class="form-label">Recipe Name</label>
+                <input type="text" class="form-control" name="recipeName" value="<%= recipe.recipeName %>">
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <input type="text" class="form-control" name="description" value="<%= recipe.description %>">
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Link to Image</label>
+                <input type="text" class="form-control" name="image" value="<%= recipe.image %>">
+            </div>
+            <div class="mb-3">
+                <label for="ingredients" class="form-label">Ingredients</label>
+                <input type="text" class="form-control" name="ingredients" value="<%= recipe.ingredients %>">
+            </div>
+            <div class="mb-3">
+                <label for="instructions" class="form-label">Instructions</label>
+                <input type="text" class="form-control" name="instructions" value="<%= recipe.instructions %>">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+<%- include("partials/footer") %>
