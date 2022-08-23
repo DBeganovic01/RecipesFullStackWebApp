@@ -31,15 +31,15 @@ const Comment = require('./models/comment');
 // Morgan
 app.use(morgan('tiny'));
 
-// Seed the database
-const seed = require('./utils/seed');
-seed();
-
 // =====================================
 // CONFIG
 // =====================================
 // Connect to Database
 mongoose.connect(config.db.connection);
+
+// Seed the database
+const seed = require('./utils/seed');
+seed();
 
 // Express Config
 app.set("view engine", "ejs");

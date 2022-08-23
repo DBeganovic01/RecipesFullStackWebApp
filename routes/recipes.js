@@ -4,20 +4,18 @@ const Recipe = require('../models/recipe');
 const Comment = require('../models/comment');
 
 // Index
-router.get("/", (req,res) => {
-    Recipe.find()
-    .exec()
-    .then((foundRecipes) => {
-        res.render("recipes", {recipes: foundRecipes});
-    })
-    .catch((err) => {
+router.get("/", async (req, res) => {
+    try {
+        const recipes = await Recipe.find().exec();
+        res.render("recipes", {recipes});
+    } catch (err) {
         console.log(err);
-        res.send(err);
-    })
-});
+        res.send("ERROR /index");
+    }
+})
 
 // Create
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
     console.log(req.body);
     const newRecipe = {
         mealType: req.body.mealType,
@@ -27,15 +25,14 @@ router.post("/", (req, res) => {
         ingredients: req.body.ingredients,
         instructions: req.body.instructions
     }
-    Recipe.create(newRecipe)
-    .then((recipe) => {
+    try {
+        const recipe = await Recipe.create(newRecipe);
         console.log(recipe);
         res.redirect("/recipes/" + recipe._id);
-    })
-    .catch((err) => {
+    } catch (err) {
         console.log(err);
-        res.redirect("/recipes/" + recipe._id);
-    });
+        res.send("ERROR /recipes POST");
+    }
 })
 
 // New
@@ -44,37 +41,32 @@ router.get("/new", (req, res) => {
 })
 
 // Show
-router.get("/:id", (req, res) => {
-    Recipe.findById(req.params.id)
-    .exec()
-    .then((recipe) => {
-        // res.render("recipes_show", {recipe});
-        Comment.find({recipeId: req.params.id}, (err, comments) => {
-            if (err) {
-                res.send(err);
-            } else {
-                res.render("recipes_show", {recipe, comments})
-            }
-        })
-    })
-    .catch((err) => {
-        res.send(err);
-    })
+router.get("/:id", async (req, res) => {
+    try {
+        const recipe = await Recipe.findById(req.params.id).exec();
+        const comments = await Comment.find({recipeId: req.params.id});
+        res.render("recipes_show", {recipe, comments});
+    } catch (err) {
+        console.log(err);
+        res.send("ERROR /recipes/:id");
+    }
 })
 
 // Edit
-router.get("/:id/edit", (req, res) => {
-    // Get the recipe from the DB
-    Recipe.findById(req.params.id)
-    .exec()
-    .then((recipe) => {
+router.get("/:id/edit", async (req, res) => {
+    try {
+        // Get the recipe from the DB
+        const recipe = await Recipe.findById(req.params.id).exec();
         // Render the edit form, passing in the recipe
-        res.render("recipes_edit", {recipe})
-    })
+        res.render("recipes_edit", {recipe});
+    } catch (err) {
+        console.log(err);
+        res.send("ERROR /recipes/:id/edit");
+    }
 })
 
 // Update
-router.put("/:id/", (req, res) => {
+router.put("/:id/", async (req, res) => {
     const recipe = {
         mealType: req.body.mealType,
         recipeName: req.body.recipeName,
@@ -83,28 +75,25 @@ router.put("/:id/", (req, res) => {
         ingredients: req.body.ingredients,
         instructions: req.body.instructions
     }
-    Recipe.findByIdAndUpdate(req.params.id, recipe, {new: true})
-    .exec()
-    .then((updatedRecipe) => {
-        console.log(updatedRecipe)
+    try {
+        const updatedRecipe = await Recipe.findByIdAndUpdate(req.params.id, recipe, {new: true}).exec();
         res.redirect(`/recipes/${req.params.id}`)
-    })
-    .catch((err) => {
-        res.send("Error: ", err);
-    })
+    } catch (err) {
+        console.log(err);
+        res.send("ERROR /recipes/:id PUT");
+    }
 })
 
 // Delete
-router.delete("/:id", (req, res) => {
-    Recipe.findByIdAndDelete(req.params.id)
-    .exec()
-    .then((deletedRecipe) => {
+router.delete("/:id", async (req, res) => {
+    try {
+        const deletedRecipe = await Recipe.findByIdAndDelete(req.params.id).exec();
         console.log("Deleted: ", deletedRecipe);
         res.redirect("/recipes");
-    })
-    .catch((err) => {
-        res.send("Error deleting: ", err);
-    })
+    } catch (err) {
+        console.log(err);
+        res.send("ERROR /recipes/:id DELETE");
+    }
 })
 
 module.exports = router;
