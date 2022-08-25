@@ -39,16 +39,31 @@
         <div class="row show_comment-header mt-3">
             COMMENT HEADER
         </div>
+
+        <a href="/recipes/<%= recipe._id %>/comments/new ">
+            <button class="btn btn-success btn-lg mb-4 mt-3">Add Comment</button>
+        </a>
         <% comments.forEach((comment) => { %>
-            <div class="row show_comment-container py-2">
-                <div class="col-3">
+            <div class="row show_comment-container py-2 border">
+                <div class="col-2 border-end my-auto">
                     <%= comment.user %>
                 </div>
-                <div class="col-9">
+                <div class="col-2 border-end my-auto d-flex flex-wrap justify-content-center">
+                    <a class="btn btn-sm btn-success w-75 p-0 my-1" href="/recipes/<%= recipe._id %>/comments/<%= comment._id %>/edit">
+                        Edit
+                    </a>
+                    <form class="w-75 my-1" action="/recipes/<%= recipe._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-sm btn-danger w-100 p-0">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+                <div class="col-8 my-auto">
                     <%= comment.text %>
                 </div>
             </div>
         <% }) %>
+        <div class="py-5"></div>
     </div>
 
 <%- include("partials/footer") %>

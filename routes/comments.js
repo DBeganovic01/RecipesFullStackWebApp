@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router({mergeParams: true});
 const Comment = require('../models/comment');
+const Recipe = require('../models/recipe');
 
 // New Comment - Show Form
 router.get("/new", (req, res) => {
@@ -8,20 +9,57 @@ router.get("/new", (req, res) => {
 })
 
 // Create Comment - Actually Update the DB
-router.post("/", (req, res) => {
-    Comment.create({
-        user: req.body.user,
-        text: req.body.text,
-        recipeId: req.body.recipeId
-    })
-    .then((newComment) => {
-        console.log(newComment);
+router.post("/", async (req, res) => {
+     try {
+        const comment = await Comment.create({
+            user: req.body.user,
+            text: req.body.text,
+            recipeId: req.body.recipeId
+         });
+        console.log(comment);
         res.redirect(`/recipes/${req.body.recipeId}`);
-    })
-    .catch((err) => {
+     } catch (err) {
         console.log(err);
-        res.redirect(`/recipes/${req.body.recipeId}`);
-    })
+        res.send("ERROR /recipes/:id/comments/new POST");
+     }
+})
+
+// Edit Comment - Show the edit form
+router.get("/:commentId/edit", async (req, res) => {
+    try {
+        const recipe = await Recipe.findById(req.params.id).exec();
+        const comment = await Comment.findById(req.params.commentId).exec();
+        console.log("recipe: ", recipe);
+        console.log("comment: ", comment);
+        res.render("comments_edit", {recipe, comment});
+    } catch (err) {
+        console.log(err);
+        res.send("ERROR comments/:commentId/edit GET");
+    }
+})
+
+// Update Comment - Actually Update the DB
+router.put("/:commentId", async (req, res) => {
+    try {
+        const comment = await Comment.findByIdAndUpdate(req.params.commentId, {text: req.body.text}, {new: true});
+        console.log(comment);
+        res.redirect(`/recipes/${req.params.id}`);
+    } catch (err) {
+        console.log(err);
+        res.send("ERROR comments/commentId/edit PUT");
+    }
+})
+
+// Delete Comment
+router.delete("/:commentId", async (req, res) => {
+    try {
+        const comment = await Comment.findByIdAndDelete(req.params.commentId);
+        console.log(comment);
+        res.redirect(`/recipes/${req.params.id}`);
+    } catch (err) {
+        console.log(err);
+        res.send("ERROR /comments/:commentId DELETE");
+    }
 })
 
 module.exports = router;
