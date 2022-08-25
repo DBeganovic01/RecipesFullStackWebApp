@@ -9,6 +9,10 @@ const recipeSchema = new mongoose.Schema({
     instructions: [String]
 });
 
+recipeSchema.index({
+    '$**': 'text'
+});
+
 const Recipe = mongoose.model("recipe", recipeSchema);
 
 module.exports = Recipe;

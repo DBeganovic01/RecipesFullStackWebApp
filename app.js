@@ -35,7 +35,7 @@ app.use(morgan('tiny'));
 // CONFIG
 // =====================================
 // Connect to Database
-mongoose.connect(config.db.connection);
+mongoose.connect(config.db.connection, config.db.options);
 
 // Seed the database
 const seed = require('./utils/seed');

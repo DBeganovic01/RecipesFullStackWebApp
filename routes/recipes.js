@@ -40,6 +40,21 @@ router.get("/new", (req, res) => {
     res.render("recipes_new");
 })
 
+// Search
+router.get("/search", async (req, res) => {
+    try {
+        const recipes = await Recipe.find({
+            $text: {
+                $search: req.query.term
+            }
+        });
+        res.render("recipes", {recipes});
+    } catch (err) {
+        console.log(err);
+        res.send("ERROR /search");
+    }
+})
+
 // Show
 router.get("/:id", async (req, res) => {
     try {
