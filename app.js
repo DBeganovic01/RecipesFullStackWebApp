@@ -12,6 +12,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const morgan = require('morgan');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const expressSession = require('express-session');
 
 // Config Imports
 const config = require('./config');
@@ -24,6 +27,7 @@ const mainRoutes = require('./routes/main');
 // Model Imports
 const Recipe = require('./models/recipe');
 const Comment = require('./models/comment');
+const User = require('./models/user');
 
 // =====================================
 // DEVELOPMENT
@@ -44,6 +48,20 @@ seed();
 // Express Config
 app.set("view engine", "ejs");
 app.use(express.static('public'));
+
+// Express Session Config
+app.use(expressSession({
+    secret: "asdvnlk429aaflknb081ava8atjas3nza38gvlase",
+    resave: false,
+    saveUninitialized: false
+}));
+
+// Passport Config
+app.use(passport.initialize());
+app.use(passport.session()); // Allows persistent sessions
+passport.serializeUser(User.serializeUser()); // What data should be stored in session
+passport.deserializeUser(User.deserializeUser()); // Get user data from the stored session
+passport.use(new LocalStrategy(User.authenticate())); // Use the Local Strategy
 
 // Body Parser Config
 app.use(bodyParser.urlencoded({extended: true}));
