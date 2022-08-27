@@ -36,14 +36,19 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/pantry">Pantry</a>
                     </li>
+                    <!-- If not logged in, s how Login and Sign Up buttons -->
+                    <% if (!user) { %> 
                     <li class="nav-item">
                         <a class="nav-link" href="/login">Log In</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/signup">Sign Up</a>
-                    </li><li class="nav-item">
+                    </li>
+                    <% } else { %>
+                    <li class="nav-item">
                         <a class="nav-link" href="/logout">Log Out</a>
                     </li>
+                    <% } %>
             </ul>
             <form class="d-flex" role="search" action="/recipes/search" method="GET">
                 <input class="form-control me-2" type="search" placeholder="Search" name="term" aria-label="Search">

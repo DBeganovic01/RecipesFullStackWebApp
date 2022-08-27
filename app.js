@@ -70,6 +70,12 @@ app.use(bodyParser.urlencoded({extended: true}));
 // Method Override Config
 app.use(methodOverride('_method'));
 
+// Current User Middleware Config
+app.use((req, res, next) => {
+    res.locals.user = req.user;
+    next();
+})
+
 // Routes Config
 app.use("/", mainRoutes);
 app.use("/", authRoutes);

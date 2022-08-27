@@ -5,6 +5,7 @@ const Comment = require('../models/comment');
 
 // Index
 router.get("/", async (req, res) => {
+    console.log(req.user); // Check to see if logged in
     try {
         const recipes = await Recipe.find().exec();
         res.render("recipes", {recipes});
