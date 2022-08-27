@@ -23,6 +23,7 @@ const config = require('./config');
 const recipeRoutes = require('./routes/recipes');
 const commentRoutes = require('./routes/comments');
 const mainRoutes = require('./routes/main');
+const authRoutes = require('./routes/auth');
 
 // Model Imports
 const Recipe = require('./models/recipe');
@@ -71,8 +72,10 @@ app.use(methodOverride('_method'));
 
 // Routes Config
 app.use("/", mainRoutes);
+app.use("/", authRoutes);
 app.use("/recipes", recipeRoutes);
 app.use("/recipes/:id/comments", commentRoutes);
+
 
 app.get("/pantry", (req,res) => {
     res.render("pantry");
