@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 })
 
 // Create
-router.post("/", async (req, res) => {
+router.post("/", isLoggedIn, async (req, res) => {
     console.log(req.body);
     const newRecipe = {
         mealType: req.body.mealType,
@@ -24,7 +24,11 @@ router.post("/", async (req, res) => {
         description: req.body.description,
         image: req.body.image,
         ingredients: req.body.ingredients,
-        instructions: req.body.instructions
+        instructions: req.body.instructions,
+        owner: {
+            id: req.user._id,
+            username: req.user.username
+        }
     }
     try {
         const recipe = await Recipe.create(newRecipe);
@@ -37,7 +41,7 @@ router.post("/", async (req, res) => {
 })
 
 // New
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
     res.render("recipes_new");
 })
 
@@ -69,7 +73,7 @@ router.get("/:id", async (req, res) => {
 })
 
 // Edit
-router.get("/:id/edit", async (req, res) => {
+router.get("/:id/edit", isLoggedIn, async (req, res) => {
     try {
         // Get the recipe from the DB
         const recipe = await Recipe.findById(req.params.id).exec();
@@ -82,7 +86,7 @@ router.get("/:id/edit", async (req, res) => {
 })
 
 // Update
-router.put("/:id/", async (req, res) => {
+router.put("/:id/", isLoggedIn, async (req, res) => {
     const recipe = {
         mealType: req.body.mealType,
         recipeName: req.body.recipeName,
@@ -101,7 +105,7 @@ router.put("/:id/", async (req, res) => {
 })
 
 // Delete
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", isLoggedIn, async (req, res) => {
     try {
         const deletedRecipe = await Recipe.findByIdAndDelete(req.params.id).exec();
         console.log("Deleted: ", deletedRecipe);
@@ -111,5 +115,13 @@ router.delete("/:id", async (req, res) => {
         res.send("ERROR /recipes/:id DELETE");
     }
 })
+
+function isLoggedIn(req, res, next){
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        res.redirect("/login");
+    }
+}
 
 module.exports = router;

@@ -6,7 +6,14 @@ const recipeSchema = new mongoose.Schema({
     description: String,
     image: String,
     ingredients: [String],
-    instructions: [String]
+    instructions: [String],
+    owner: {
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        },
+        username: String
+    }
 });
 
 recipeSchema.index({

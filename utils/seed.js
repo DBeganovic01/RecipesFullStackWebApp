@@ -37,17 +37,17 @@ const seed = async () => {
     await Comment.deleteMany();
     console.log("Deleted all of the comments");
     // Create three new recipes
-    for (const recipe_seed of recipe_seeds) {
-        let recipe = await Recipe.create(recipe_seed);
-        console.log("Created a new recipe: ", recipe.recipeName)
-        // Create a new comment for each recipe
-        await Comment.create({
-            text: "One of my favorite meals!",
-            user: "Bob",
-            recipeId: recipe._id
-        })
-        console.log("Created a new comment for ", recipe.recipeName);
-    }
+    // for (const recipe_seed of recipe_seeds) {
+    //     let recipe = await Recipe.create(recipe_seed);
+    //     console.log("Created a new recipe: ", recipe.recipeName)
+    //     // Create a new comment for each recipe
+    //     await Comment.create({
+    //         text: "One of my favorite meals!",
+    //         user: "Bob",
+    //         recipeId: recipe._id
+    //     })
+    //     console.log("Created a new comment for ", recipe.recipeName);
+    // }
 }
 
 module.exports = seed;

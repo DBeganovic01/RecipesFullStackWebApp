@@ -5,11 +5,11 @@ router.get("/", (req, res) => {
     res.render("landing");
 });
 
-router.get("/account", isLoggeIn, (req, res) => {
+router.get("/account", isLoggedIn, (req, res) => {
     res.render("account");
 });
 
-function isLoggeIn(req, res, next){
+function isLoggedIn(req, res, next){
     if (req.isAuthenticated()) {
         return next();
     } else {

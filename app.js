@@ -43,8 +43,8 @@ app.use(morgan('tiny'));
 mongoose.connect(config.db.connection, config.db.options);
 
 // Seed the database
-const seed = require('./utils/seed');
-seed();
+// const seed = require('./utils/seed');
+// seed();
 
 // Express Config
 app.set("view engine", "ejs");
