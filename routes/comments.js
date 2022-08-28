@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router({mergeParams: true});
 const Comment = require('../models/comment');
 const Recipe = require('../models/recipe');
+const isLoggedIn = require('../utils/isLoggedIn');
 
 // New Comment - Show Form
 router.get("/new", isLoggedIn, (req, res) => {
@@ -64,13 +65,5 @@ router.delete("/:commentId", isLoggedIn, async (req, res) => {
         res.send("ERROR /comments/:commentId DELETE");
     }
 })
-
-function isLoggedIn(req, res, next){
-    if (req.isAuthenticated()) {
-        return next();
-    } else {
-        res.redirect("/login");
-    }
-}
 
 module.exports = router;

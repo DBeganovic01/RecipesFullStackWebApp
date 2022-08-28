@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Recipe = require('../models/recipe');
 const Comment = require('../models/comment');
+const isLoggedIn = require('../utils/isLoggedIn');
 
 // Index
 router.get("/", async (req, res) => {
@@ -115,13 +116,5 @@ router.delete("/:id", isLoggedIn, async (req, res) => {
         res.send("ERROR /recipes/:id DELETE");
     }
 })
-
-function isLoggedIn(req, res, next){
-    if (req.isAuthenticated()) {
-        return next();
-    } else {
-        res.redirect("/login");
-    }
-}
 
 module.exports = router;
