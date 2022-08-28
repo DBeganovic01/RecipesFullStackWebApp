@@ -4,15 +4,18 @@ const Comment = require('../models/comment');
 const Recipe = require('../models/recipe');
 
 // New Comment - Show Form
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
     res.render("comments_new", {recipeId: req.params.id})
 })
 
 // Create Comment - Actually Update the DB
-router.post("/", async (req, res) => {
+router.post("/", isLoggedIn, async (req, res) => {
      try {
         const comment = await Comment.create({
-            user: req.body.user,
+            user: {
+                id: req.user._id,
+                username: req.user.username
+            },
             text: req.body.text,
             recipeId: req.body.recipeId
          });
@@ -25,7 +28,7 @@ router.post("/", async (req, res) => {
 })
 
 // Edit Comment - Show the edit form
-router.get("/:commentId/edit", async (req, res) => {
+router.get("/:commentId/edit", isLoggedIn, async (req, res) => {
     try {
         const recipe = await Recipe.findById(req.params.id).exec();
         const comment = await Comment.findById(req.params.commentId).exec();
@@ -39,7 +42,7 @@ router.get("/:commentId/edit", async (req, res) => {
 })
 
 // Update Comment - Actually Update the DB
-router.put("/:commentId", async (req, res) => {
+router.put("/:commentId", isLoggedIn, async (req, res) => {
     try {
         const comment = await Comment.findByIdAndUpdate(req.params.commentId, {text: req.body.text}, {new: true});
         console.log(comment);
@@ -51,7 +54,7 @@ router.put("/:commentId", async (req, res) => {
 })
 
 // Delete Comment
-router.delete("/:commentId", async (req, res) => {
+router.delete("/:commentId", isLoggedIn, async (req, res) => {
     try {
         const comment = await Comment.findByIdAndDelete(req.params.commentId);
         console.log(comment);
@@ -61,5 +64,13 @@ router.delete("/:commentId", async (req, res) => {
         res.send("ERROR /comments/:commentId DELETE");
     }
 })
+
+function isLoggedIn(req, res, next){
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        res.redirect("/login");
+    }
+}
 
 module.exports = router;
