@@ -75,14 +75,23 @@ router.get("/:id", async (req, res) => {
 
 // Edit
 router.get("/:id/edit", isLoggedIn, async (req, res) => {
-    try {
-        // Get the recipe from the DB
-        const recipe = await Recipe.findById(req.params.id).exec();
-        // Render the edit form, passing in the recipe
-        res.render("recipes_edit", {recipe});
-    } catch (err) {
-        console.log(err);
-        res.send("ERROR /recipes/:id/edit");
+    
+    if (req.isAuthenticated()) { // Check if user is logged in
+        const recipe = await Recipe.findById(req.params.id).exec(); // Get the recipe from the DB
+        console.log("recipe owner: ", recipe.owner.id);
+        console.log("logged in user: ", req.user._id);
+        if (recipe.owner.id.equals(req.user._id)) { // If owner, render the form to edit
+            try {
+                res.render("recipes_edit", {recipe}); // Render the edit form, passing in the recipe
+            } catch (err) {
+                console.log(err);
+                res.send("ERROR /recipes/:id/edit");
+            }
+        } else { // If not, redirect back to show page
+            res.redirect(`/recipes/${recipe._id}`);
+        }
+    } else {
+        res.redirect("/login"); // If not logged in, redirect to /login
     }
 })
 
