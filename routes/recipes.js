@@ -3,6 +3,7 @@ const router = express.Router();
 const Recipe = require('../models/recipe');
 const Comment = require('../models/comment');
 const isLoggedIn = require('../utils/isLoggedIn');
+const checkRecipeOwner = require('../utils/checkRecipeOwner');
 
 // Index
 router.get("/", async (req, res) => {
@@ -74,13 +75,9 @@ router.get("/:id", async (req, res) => {
 })
 
 // Edit
-router.get("/:id/edit", isLoggedIn, async (req, res) => {
-    
+router.get("/:id/edit", checkRecipeOwner, async (req, res) => {
     if (req.isAuthenticated()) { // Check if user is logged in
         const recipe = await Recipe.findById(req.params.id).exec(); // Get the recipe from the DB
-        console.log("recipe owner: ", recipe.owner.id);
-        console.log("logged in user: ", req.user._id);
-        if (recipe.owner.id.equals(req.user._id)) { // If owner, render the form to edit
             try {
                 res.render("recipes_edit", {recipe}); // Render the edit form, passing in the recipe
             } catch (err) {
@@ -90,13 +87,10 @@ router.get("/:id/edit", isLoggedIn, async (req, res) => {
         } else { // If not, redirect back to show page
             res.redirect(`/recipes/${recipe._id}`);
         }
-    } else {
-        res.redirect("/login"); // If not logged in, redirect to /login
-    }
 })
 
 // Update
-router.put("/:id/", isLoggedIn, async (req, res) => {
+router.put("/:id/", checkRecipeOwner, async (req, res) => {
     const recipe = {
         mealType: req.body.mealType,
         recipeName: req.body.recipeName,
@@ -115,7 +109,7 @@ router.put("/:id/", isLoggedIn, async (req, res) => {
 })
 
 // Delete
-router.delete("/:id", isLoggedIn, async (req, res) => {
+router.delete("/:id", checkRecipeOwner, async (req, res) => {
     try {
         const deletedRecipe = await Recipe.findByIdAndDelete(req.params.id).exec();
         console.log("Deleted: ", deletedRecipe);
