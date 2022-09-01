@@ -31,3 +31,7 @@ body {
 .show_image-container img {
     width: 80%;
 }
+
+.mealType-text {
+    text-transform:capitalize;
+}

@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
 router.post("/", isLoggedIn, async (req, res) => {
     console.log(req.body);
     const newRecipe = {
-        mealType: req.body.mealType,
+        mealType: req.body.mealType.toLocaleLowerCase(),
         recipeName: req.body.recipeName,
         description: req.body.description,
         image: req.body.image,
@@ -62,6 +62,17 @@ router.get("/search", async (req, res) => {
     }
 })
 
+// Meal Type/Category
+router.get("/meal/:meal", async (req, res) => {
+    const validMealType = ["breakfast", "lunch", "dinner", "dessert", "snack"];
+    if (validMealType.includes(req.params.meal.toLocaleLowerCase())){
+        const recipes = await Recipe.find({mealType: req.params.meal}).exec();
+        res.render("recipes", {recipes});
+    } else {
+        res.send("Please enter a valid meal type");
+    }
+})
+
 // Show
 router.get("/:id", async (req, res) => {
     try {
@@ -92,7 +103,7 @@ router.get("/:id/edit", checkRecipeOwner, async (req, res) => {
 // Update
 router.put("/:id/", checkRecipeOwner, async (req, res) => {
     const recipe = {
-        mealType: req.body.mealType,
+        mealType: req.body.mealType.toLocaleLowerCase(),
         recipeName: req.body.recipeName,
         description: req.body.description,
         image: req.body.image,
