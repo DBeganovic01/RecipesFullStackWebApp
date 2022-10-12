@@ -16,14 +16,13 @@ router.post("/signup", async (req, res) => {
                 username: req.body.username,
                 email: req.body.email
             }), req.body.password);
-
-            console.log(newUser);
+            req.flash("success", `Account created successfully for ${newUser.username}`);
             passport.authenticate("local")(req, res, () => {
                 res.redirect("/recipes");
-            });
-    } catch (err) {
-        console.log(err);
-        res.send("ERROR /signup POST");
+            });   
+        } catch (err) {
+            console.log(err);
+            res.send("ERROR /signup POST");
     }
 });
 
@@ -35,13 +34,16 @@ router.get("/login", (req, res) => {
 // Login 
 router.post("/login", passport.authenticate("local", {
     successRedirect: "/recipes",
-    failureRedirect: "/login"
+    failureRedirect: "/login",
+    failureFlash: true,
+    successFlash: "Logged in successfully"
 }));
 
 // Logout
 router.get("/logout", function(req, res, next) {
     req.logout(function(err) {
       if (err) { return next(err); }
+      req.flash("success", "You have logged out");
       res.redirect("/recipes");
     });
 });

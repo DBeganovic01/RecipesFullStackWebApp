@@ -6,9 +6,11 @@ const checkRecipeOwner = async (req, res, next) => {
         if (recipe.owner.id.equals(req.user._id)) { // Check if user owns the recipe
             next(); // Continue to next page
         } else { 
+            req.flash("error", "You don't have permission to do that");
             res.redirect("back"); // Go back to previous page
         }
     } else {
+        req.flash("error", "You must be logged in to do that");
         res.redirect("/login"); // If not logged in, redirect to /login
     }
 }

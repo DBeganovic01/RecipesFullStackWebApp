@@ -36,7 +36,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/pantry">Pantry</a>
                     </li>
-                    <!-- If not logged in, s how Login and Sign Up buttons -->
+                    <!-- If not logged in, show Login and Sign Up buttons -->
                     <% if (!user) { %> 
                     <li class="nav-item">
                         <a class="nav-link" href="/login">Log In</a>
@@ -57,12 +57,12 @@
         </div>
     </div>
 </nav>
-<% if (successMessage && successMessage.length > 0) { %>
+<% if (successMessage != "") { %>
     <div class="alert alert-success" role="alert">
         <%= successMessage %>
     </div>
 <% } %>
-<% if (errorMessage && errorMessage.length > 0) { %>
+<% if (errorMessage != "") { %>
     <div class="alert alert-warning" role="alert">
         <%= errorMessage %>
     </div>

@@ -75,7 +75,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 
 // State Config
-app.use((req, res, next) => {
+app.use(function(req, res, next) {
     res.locals.user = req.user;
     res.locals.errorMessage = req.flash("error");
     res.locals.successMessage = req.flash("success");
@@ -87,7 +87,6 @@ app.use("/", mainRoutes);
 app.use("/", authRoutes);
 app.use("/recipes", recipeRoutes);
 app.use("/recipes/:id/comments", commentRoutes);
-
 
 app.get("/pantry", (req,res) => {
     res.render("pantry");
