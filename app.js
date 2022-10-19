@@ -11,7 +11,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
-const morgan = require('morgan');
+//const morgan = require('morgan');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const expressSession = require('express-session');
@@ -35,7 +35,7 @@ const User = require('./models/user');
 // DEVELOPMENT
 // =====================================
 // Morgan
-app.use(morgan('tiny'));
+//app.use(morgan('tiny'));
 
 // =====================================
 // CONFIG
@@ -50,6 +50,9 @@ mongoose.connect(config.db.connection, config.db.options);
 // Express Config
 app.set("view engine", "ejs");
 app.use(express.static('public'));
+app.use(express.json({
+    type: ["application/json", "text/plain"]
+}));
 
 // Express Session Config
 app.use(expressSession({
