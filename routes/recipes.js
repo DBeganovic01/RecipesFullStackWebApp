@@ -78,11 +78,11 @@ router.get("/meal/:meal", async (req, res) => {
 })
 
 // Vote
-router.post("/vote", isLoggedIn, (req, res) => {
-    console.log(req.body);
-    res.json({
-        message: "Voted!"
-    })
+router.post("/vote", isLoggedIn, async (req, res) => {
+    console.log("Request body:", req.body);
+    const recipe = await Recipe.findById(req.body.recipeId);
+    console.log(recipe);
+    res.json(recipe);
 })
 
 // Show

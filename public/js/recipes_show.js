@@ -16,12 +16,16 @@ const sendVote = async (voteType) => {
         }
     }
     if (voteType === "up"){
-        options.body = JSON.stringify({vote: "up"})
-    }
-    else if (voteType === "down"){
-        options.body = JSON.stringify({vote: "down"})
-    }
-    else {
+        options.body = JSON.stringify({
+            voteType: "up",
+            recipeId
+        });
+    } else if (voteType === "down"){
+        options.body = JSON.stringify({
+            voteType: "down",
+            recipeId
+        });
+    } else {
         throw ("voteType must be 'up' or down'")
     }
     // Send fetch request
