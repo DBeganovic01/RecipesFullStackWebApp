@@ -56,7 +56,7 @@ app.use(express.json({
 
 // Express Session Config
 app.use(expressSession({
-    secret: "asdvnlk429aaflknb081ava8atjas3nza38gvlase",
+    secret: config.expressSession.secret,
     resave: false,
     saveUninitialized: false
 }));
