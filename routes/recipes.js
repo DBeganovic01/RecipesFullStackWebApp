@@ -90,43 +90,45 @@ router.post("/vote", isLoggedIn, async (req, res) => {
         if (req.body.voteType === "up") { // Upvoting
             recipe.upvotes.push(req.user.username);
             recipe.save();
-            response.message = "Upvote tallied!";
+            response = {message: "Upvote tallied!", code: 1};
         } else if (req.body.voteType === "down"){ // Downvoting
             recipe.downvotes.push(req.user.username);
             recipe.save();
-            response.message = "Downvote tallied!";
+            response = {message: "Downvote tallied!", code: -1};
         } else { // Error
-            response.message = "Error voting (1)";
+            response = {message: "Voting error (1)", code: "err"};
         }
     } else if (alreadyUpvoted >= 0) { // Already upvoted
         if (req.body.voteType === "up") {
             recipe.upvotes.splice(alreadyUpvoted, 1);
             recipe.save();
-            response.message = "Upvote removed";
-        } else if (req.body.voteType === "down"){
+            response = {message: "Upvote removed", code: 0};
+        } else if (req.body.voteType === "down") {
             recipe.upvotes.splice(alreadyUpvoted, 1);
             recipe.downvotes.push(req.user.username);
             recipe.save();
-            response.message = "Changed upvote to downvote";
+            response = {message: "Upvote changed to downvote", code: -1};
         } else { // Error
-            response.message = "Error voting (2)";
+            response = {message: "Voting error (2)", code: "err"};
         }
     } else if (alreadyDownvoted >= 0) { // Already downvoted
         if (req.body.voteType === "up") {
             recipe.downvotes.splice(alreadyDownvoted, 1);
             recipe.upvotes.push(req.user.username);
             recipe.save();
-            response.message = "Changed downvote to upvote";
+            response = {message: "Downvote changed to upvote", code: 1};
         } else if (req.body.voteType === "down"){
             recipe.downvotes.splice(alreadyDownvoted, 1);
             recipe.save();
-            response.message = "Downvote removed";
+            response = {message: "Downvote removed", code: 0};
         } else { // Error
-            response.message = "Error voting (3)";
+            response = {message: "Voting error (3)", code: "err"};
         }
     } else { // Error
-        response.message = "Error voting (4)";
+        response = {message: "Voting error (4)", code: "err"};
     }
+    // Update score immediately prior to sending
+    response.score = recipe.upvotes.length - recipe.downvotes.length;
     console.log(recipe);
     res.json(response);
 })

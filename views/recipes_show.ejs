@@ -6,7 +6,15 @@
                 <img src="<%= recipe.image %>">
             </div>
             <div class="col-6 show_details-container">
-                <h1><%= recipe.recipeName %></h1>
+                <div class="row mt-4">
+                <div class="col-3">
+                    <h1><%= recipe.recipeName %></h1>
+                </div>
+                <div class="col-4 mt-auto mx-0">
+                    <h6>Submitted by <%= recipe.owner.username %></h6>
+                </div>
+            </div>    
+                
                 <p><%= recipe.description %></p>
                 <table class="table">
                     <tbody>
@@ -43,11 +51,15 @@
                 <button class="btn btn-success btn-lg mb-4 mt-3">Add Comment</button>
             </a>
             <div class="col-2">
-                <% if (user) { %>
+                <% if (user && recipe.upvotes.indexOf(user.username) >= 0) { %>
+                    <button id="upvote_btn" class="btn btn-success btn-lg mt-3">+</button>
+                <% } else if (user) { %>
                     <button id="upvote_btn" class="btn btn-outline-success btn-lg mt-3">+</button>
                 <% } %>
-                <span id="score" class="mx-2">10</span>
-                <% if (user) { %>
+                <span id="score" class="mx-2"><%= recipe.upvotes.length - recipe.downvotes.length %></span> 
+                <% if (user && recipe.downvotes.indexOf(user.username) >= 0) { %>
+                    <button id="downvote_btn" class="btn btn-danger btn-lg mt-3">-</button>
+                <% } else if (user) { %>
                     <button id="downvote_btn" class="btn btn-outline-danger btn-lg mt-3">-</button>
                 <% } %>
             </div>
