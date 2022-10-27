@@ -81,8 +81,54 @@ router.get("/meal/:meal", async (req, res) => {
 router.post("/vote", isLoggedIn, async (req, res) => {
     console.log("Request body:", req.body);
     const recipe = await Recipe.findById(req.body.recipeId);
+    const alreadyUpvoted = recipe.upvotes.indexOf(req.user.username); // returns -1 if not found
+    const alreadyDownvoted = recipe.downvotes.indexOf(req.user.username); // returns -1 if not found
+
+    let response = {};
+    // Voting logic
+    if (alreadyUpvoted === -1 && alreadyDownvoted === -1) { // Has not voted yet
+        if (req.body.voteType === "up") { // Upvoting
+            recipe.upvotes.push(req.user.username);
+            recipe.save();
+            response.message = "Upvote tallied!";
+        } else if (req.body.voteType === "down"){ // Downvoting
+            recipe.downvotes.push(req.user.username);
+            recipe.save();
+            response.message = "Downvote tallied!";
+        } else { // Error
+            response.message = "Error voting (1)";
+        }
+    } else if (alreadyUpvoted >= 0) { // Already upvoted
+        if (req.body.voteType === "up") {
+            recipe.upvotes.splice(alreadyUpvoted, 1);
+            recipe.save();
+            response.message = "Upvote removed";
+        } else if (req.body.voteType === "down"){
+            recipe.upvotes.splice(alreadyUpvoted, 1);
+            recipe.downvotes.push(req.user.username);
+            recipe.save();
+            response.message = "Changed upvote to downvote";
+        } else { // Error
+            response.message = "Error voting (2)";
+        }
+    } else if (alreadyDownvoted >= 0) { // Already downvoted
+        if (req.body.voteType === "up") {
+            recipe.downvotes.splice(alreadyDownvoted, 1);
+            recipe.upvotes.push(req.user.username);
+            recipe.save();
+            response.message = "Changed downvote to upvote";
+        } else if (req.body.voteType === "down"){
+            recipe.downvotes.splice(alreadyDownvoted, 1);
+            recipe.save();
+            response.message = "Downvote removed";
+        } else { // Error
+            response.message = "Error voting (3)";
+        }
+    } else { // Error
+        response.message = "Error voting (4)";
+    }
     console.log(recipe);
-    res.json(recipe);
+    res.json(response);
 })
 
 // Show
